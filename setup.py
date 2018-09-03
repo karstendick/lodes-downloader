@@ -12,5 +12,6 @@ setup(
     install_requires=[
         'wget==3.2',
         'beautifulsoup4==4.6.3',
+        'requests==2.19.1',
     ],
 )
