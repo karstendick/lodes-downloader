@@ -1,0 +1,71 @@
+digraph dfd{
+    node[shape=record, rankdir=LR]
+    nodesep=1
+
+    od [label="{<f0> Origin-Destination \
+        | <ST> ST: 2-letter postal code \
+        | <PART> PART: main or aux \n (i.e. work in home state or not) \
+        | <TYPE> TYPE: Job Type \n All, primary, all private, private primary, \n all federal, federal primary\
+        | <YEAR> YEAR: Year of job data \
+        | <w_geocode> w_geocode: Workplace census block code \
+        | <h_geocode> h_geocode: Residence census block code \
+        | S000: Total number of jobs \
+        | <SA01> SA01: Number of jobs of workers \n age 29 or younger\
+        | ... \
+    }"]
+
+    rac [label="{<f0> Residence Area Characteristics \
+        | <ST> ST: 2-letter postal code \
+        | <SEG> SEG: Segment of workforce \n S000 - SI03 \
+        | <TYPE> TYPE: Job Type \n All, primary, all private, private primary, \n all federal, federal primary\
+        | <YEAR> YEAR: Year of job data \
+        | <h_geocode> h_geocode: Residence census block code \
+        | S000: Total number of jobs \
+        | ... \
+    }"]
+
+    rac:h_geocode -> od:h_geocode;
+    rac:SEG -> od:SA01;
+
+    wac [label="{<f0> Workplace Area Characteristics \
+        | <ST> ST: 2-letter postal code \
+        | <SEG> SEG: Segment of workforce \n S000 - SI03 \
+        | <TYPE> TYPE: Job Type \n All, primary, all private, private primary, \n all federal, federal primary\
+        | <YEAR> YEAR: Year of job data \
+        | <w_geocode> w_geocode: Work census block code \
+        | S000: Total number of jobs \
+        | ... \
+    }"]
+
+    wac:w_geocode -> od:w_geocode;
+    wac:SEG -> od:SA01;
+
+    xwalk [label="{<f0> Geography Crosswalk \
+        | <ST> ST: 2-letter postal code \
+        | <tabblk2010> KEY tabblk2010: 2010 census block code KEY \
+        | <stusps> stusps: USPS state code \
+        | cty: FIPS county code \
+        | ctyname: county name \
+        | trct: census tract code \
+        | trctname: trace name \
+        | bgrp: census blockgroup code \
+        | bgrpname: census blockgroup name \
+        | cbsa: CBSA code \
+        | cbsaname: CBSA name\
+        | zcta: ZIP code tabulation area (ZCTA) code\
+        | zctaname: ZCTA name\
+        | blklatdd: latitude \
+        | blklondd: longitude \
+        | ... \
+    }"]
+
+    od:w_geocode -> xwalk:tabblk2010
+    od:h_geocode -> xwalk:tabblk2010
+    rac:h_geocode -> xwalk:tabblk2010
+    wac:w_geocode -> xwalk:tabblk2010
+
+    { rank=min; od };
+    { rank=max; rac:f0, wac:f0 };
+
+
+}
